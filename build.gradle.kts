@@ -32,8 +32,8 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
-            packageName = "NoN-linear"
-            packageVersion = "1.0.0"
+            packageName = "NeoSolver"
+            packageVersion = "1.0.1"
         }
     }
 }

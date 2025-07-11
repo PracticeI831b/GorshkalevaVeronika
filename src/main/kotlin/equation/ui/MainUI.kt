@@ -6,6 +6,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.runtime.*
@@ -18,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import equation.solver.Solution
 import equation.solver.findSolution
-import org.jetbrains.letsPlot.Figure
 
 @Composable
 fun EquationApp() {
@@ -29,11 +30,11 @@ fun EquationApp() {
     var showDetail by remember { mutableStateOf(true) }
 
     MaterialTheme(colors = lightColors(
-        primary = Color(0xFF1976D2),
-        primaryVariant = Color(0xFF0D47A1),
-        secondary = Color(0xFF03A9F4),
+        primary = Color(0xFF0D47A1),
+        primaryVariant = Color(0xFF002171),
+        secondary = Color(0xFF0277BD),
         background = Color(0xFFE3F2FD),
-        surface = Color(0xFFBBDEFB)
+        surface = Color(0xFFFFFFFF)
     )) {
         Column(
             modifier = Modifier
@@ -89,11 +90,18 @@ private fun Header() {
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        Text(
-            text = "Точность вычислений: 0.001",
-            color = MaterialTheme.colors.primary.copy(alpha = 0.8f),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        Card(
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
+            elevation = 0.dp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            Text(
+                text = "Точность: 0.001",
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                fontSize = 14.sp
+            )
+        }
     }
 }
 
@@ -167,10 +175,15 @@ private fun SolutionVisualization(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Визуализация решения:",
+                text = "Вид графика:",
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier.weight(1f)
+            )
+
+            Text(
+                text = if (showDetail) "Детальный" else "Общий",
+                color = MaterialTheme.colors.primary
             )
 
             IconButton(onClick = onViewToggle) {
@@ -182,10 +195,6 @@ private fun SolutionVisualization(
                     tint = MaterialTheme.colors.primary
                 )
             }
-            Text(
-                text = if (showDetail) "Детальный" else "Общий",
-                color = MaterialTheme.colors.primary
-            )
         }
 
         Card(
