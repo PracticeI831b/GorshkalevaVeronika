@@ -23,6 +23,7 @@ dependencies {
     implementation("org.jetbrains.lets-plot:lets-plot-common:4.6.0")
     implementation("org.jetbrains.lets-plot:lets-plot-compose:2.2.1")
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.10.0")
+    implementation(compose.materialIconsExtended)
 }
 
 compose.desktop {
