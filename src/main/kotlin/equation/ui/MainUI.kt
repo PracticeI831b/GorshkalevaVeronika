@@ -6,8 +6,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.runtime.*
@@ -21,21 +19,25 @@ import androidx.compose.ui.unit.sp
 import equation.solver.Solution
 import equation.solver.findSolution
 
+// Основной UI компонент приложения
 @Composable
 fun EquationApp() {
-    var paramInput by remember { mutableStateOf("1.0") }
-    var solution by remember { mutableStateOf<Solution?>(null) }
-    var error by remember { mutableStateOf("") }
-    var loading by remember { mutableStateOf(false) }
-    var showDetail by remember { mutableStateOf(true) }
+    // Состояния приложения
+    var paramInput by remember { mutableStateOf("1.0") } // Ввод параметра
+    var solution by remember { mutableStateOf<Solution?>(null) } // Решение
+    var error by remember { mutableStateOf("") } // Ошибка
+    var loading by remember { mutableStateOf(false) } // Флаг загрузки
+    var showDetail by remember { mutableStateOf(true) } // Режим отображения графика
 
+    // Цветовая схема (синяя тема)
     MaterialTheme(colors = lightColors(
-        primary = Color(0xFF0D47A1),
-        primaryVariant = Color(0xFF002171),
-        secondary = Color(0xFF0277BD),
-        background = Color(0xFFE3F2FD),
-        surface = Color(0xFFFFFFFF)
-    )) {
+            primary = Color(0xFF0D47A1),       // Основной синий
+            primaryVariant = Color(0xFF002171), // Темный синий
+            secondary = Color(0xFF0277BD),     // Светлый синий
+            background = Color(0xFFE3F2FD),    // Фоновый голубой
+            surface = Color(0xFFFFFFFF)        // Белый для поверхностей
+        )
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -43,8 +45,10 @@ fun EquationApp() {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Заголовок приложения
             Header()
 
+            // Панель ввода параметра
             ParameterInput(
                 value = paramInput,
                 loading = loading,
@@ -53,6 +57,7 @@ fun EquationApp() {
                     loading = true
                     error = ""
                     solution = null
+                    // Запуск вычислений
                     findSolution(paramInput) { result, message ->
                         solution = result
                         error = message
@@ -61,10 +66,12 @@ fun EquationApp() {
                 }
             )
 
+            // Отображение ошибок
             if (error.isNotEmpty()) {
                 ErrorMessage(error)
             }
 
+            // Отображение результатов
             if (solution != null || loading) {
                 SolutionVisualization(
                     solution = solution,
@@ -77,9 +84,11 @@ fun EquationApp() {
     }
 }
 
+// Заголовок приложения
 @Composable
 private fun Header() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        // Название уравнения
         Text(
             text = "Решение уравнения √(x + a) = 1/x",
             style = TextStyle(
@@ -90,6 +99,7 @@ private fun Header() {
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
+        // Карточка с точностью вычислений
         Card(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
             elevation = 0.dp,
@@ -105,12 +115,13 @@ private fun Header() {
     }
 }
 
+// Панель ввода параметра
 @Composable
 private fun ParameterInput(
-    value: String,
-    loading: Boolean,
-    onValueChange: (String) -> Unit,
-    onSolve: () -> Unit
+    value: String,                 // Текущее значение
+    loading: Boolean,              // Флаг загрузки
+    onValueChange: (String) -> Unit, // Обработчик изменения
+    onSolve: () -> Unit            // Обработчик вычисления
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -118,6 +129,7 @@ private fun ParameterInput(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
+        // Поле ввода параметра
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -133,6 +145,7 @@ private fun ParameterInput(
 
         Spacer(modifier = Modifier.width(16.dp))
 
+        // Кнопка запуска вычислений
         Button(
             onClick = onSolve,
             enabled = !loading,
@@ -149,27 +162,30 @@ private fun ParameterInput(
     }
 }
 
+// Отображение сообщений об ошибках
 @Composable
 private fun ErrorMessage(text: String) {
     Text(
         text = text,
-        color = Color(0xFFD32F2F),
+        color = Color(0xFFD32F2F), // Красный цвет ошибки
         modifier = Modifier.padding(vertical = 8.dp)
     )
 }
 
+// Визуализация решения
 @Composable
 private fun SolutionVisualization(
-    solution: Solution?,
-    loading: Boolean,
-    showDetail: Boolean,
-    onViewToggle: () -> Unit
+    solution: Solution?,     // Результаты вычислений
+    loading: Boolean,        // Флаг загрузки
+    showDetail: Boolean,     // Флаг детализации
+    onViewToggle: () -> Unit // Переключение режима
 ) {
     Column(
-        modifier = Modifier
+        modifier = Modifierit
             .fillMaxWidth()
             .padding(top = 16.dp)
     ) {
+        // Панель управления видом графика
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -181,22 +197,25 @@ private fun SolutionVisualization(
                 modifier = Modifier.weight(1f)
             )
 
+            // Текущий режим
             Text(
                 text = if (showDetail) "Детальный" else "Общий",
                 color = MaterialTheme.colors.primary
             )
 
+            // Кнопка переключения режима
             IconButton(onClick = onViewToggle) {
                 Icon(
                     imageVector = if (showDetail)
-                        Icons.Filled.ZoomOut else
-                        Icons.Filled.ZoomIn,
+                        Icons.Filled.ZoomOut else // Иконка уменьшения
+                        Icons.Filled.ZoomIn,      // Иконка увеличения
                     contentDescription = "Переключить вид",
                     tint = MaterialTheme.colors.primary
                 )
             }
         }
 
+        // Область отображения графика
         Card(
             elevation = 8.dp,
             backgroundColor = Color.White,
@@ -205,31 +224,32 @@ private fun SolutionVisualization(
                 .padding(vertical = 8.dp)
                 .height(300.dp)
         ) {
-            if (loading) {
-                LoadingIndicator()
-            } else if (solution == null) {
-                Placeholder("Начните вычисления")
-            } else {
-                ChartRenderer.PlotView(
+            when {
+                loading -> LoadingIndicator()
+                solution == null -> Placeholder("Начните вычисления")
+                else -> ChartRenderer.PlotView(
                     chart = if (showDetail) solution.detailedChart else solution.mainChart
                 )
             }
         }
 
+        // Детали решения
         SolutionDetails(solution)
     }
 }
 
+// Панель с результатами вычислений
 @Composable
 private fun SolutionDetails(solution: Solution?) {
     Card(
         elevation = 4.dp,
-        backgroundColor = Color(0xFFE1F5FE),
+        backgroundColor = Color(0xFFE1F5FE), // Светло-голубой фон
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            // Заголовок результатов
             Text(
                 text = "Результаты вычислений:",
                 fontWeight = FontWeight.Bold,
@@ -237,6 +257,7 @@ private fun SolutionDetails(solution: Solution?) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
+            // Отображение результатов или заглушки
             if (solution != null) {
                 DetailItem("Найденный корень:", "%.5f".format(solution.rootValue))
                 DetailItem("Значение функции:", "%.7f".format(solution.functionValue))
@@ -249,22 +270,26 @@ private fun SolutionDetails(solution: Solution?) {
     }
 }
 
+// Элемент детализации результата
 @Composable
 private fun DetailItem(label: String, value: String) {
     Row(modifier = Modifier.padding(vertical = 4.dp)) {
+        // Название параметра
         Text(
             text = label,
             color = MaterialTheme.colors.primary,
             modifier = Modifier.width(180.dp)
         )
+        // Значение параметра
         Text(
             text = value,
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF01579B)
+            color = Color(0xFF01579B) // Темно-синий цвет
         )
     }
 }
 
+// Индикатор загрузки
 @Composable
 private fun LoadingIndicator() {
     Box(
@@ -275,6 +300,7 @@ private fun LoadingIndicator() {
     }
 }
 
+// Заглушка для пустых состояний
 @Composable
 private fun Placeholder(text: String) {
     Box(
