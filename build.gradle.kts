@@ -34,6 +34,10 @@ compose.desktop {
             targetFormats(TargetFormat.Exe)
             packageName = "NeoSolver"
             packageVersion = "1.0.1"
+
+            windows {
+                iconFile.set(project.file("src/main/kotlin/equation/icons/bant.ico"))
+            }
         }
     }
 }
