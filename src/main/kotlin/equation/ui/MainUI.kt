@@ -181,7 +181,7 @@ private fun SolutionVisualization(
     onViewToggle: () -> Unit // Переключение режима
 ) {
     Column(
-        modifier = Modifierit
+        modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
     ) {
